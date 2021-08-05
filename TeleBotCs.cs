@@ -1,15 +1,24 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
+
 using System.Linq;
-using System.Net;
+
+using System.Net.Http;
+
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TeleBotCSharp;
 
 namespace CsTeleBot
 {
+    /// <summary>
+    /// Avalible methods:
+    ///     GetMe
+    ///     SendMessage
+    ///     Polling
+    /// </summary>
     public class TeleBotCs
     {
         private const string BaseApiUrl = "https://api.telegram.org/bot";
@@ -41,12 +50,12 @@ namespace CsTeleBot
             bool disableWebPagePreview = false, bool disableNotification = false, int replyToMessageId = 0,
             bool allowSendingWithoutReply = false)
         {
-            var param = new Dictionary<string, string>();
-            param.Add("chat_id", chatId.ToString());
-            param.Add("text", text);
+            var param = new AllAvalibleParams();
+            param.chat_id = chatId;
+            param.text = text;
             if (parseMode != null)
             {
-                param.Add("parse_mode", parseMode);
+                param.parse_mode = parseMode;
             }
             if (entities != null)
             {
@@ -54,19 +63,19 @@ namespace CsTeleBot
             }
             if (disableWebPagePreview)
             {
-                param.Add("disable_web_page_preview", disableWebPagePreview.ToString());
+                param.disable_web_page_preview = disableWebPagePreview;
             }
             if (disableNotification)
             {
-                param.Add("disable_notification", disableNotification.ToString());
+                param.disable_notification = disableNotification;
             }
             if (replyToMessageId != 0)
             {
-                param.Add("reply_to_message_id", replyToMessageId.ToString());
+                param.reply_to_message_id = replyToMessageId;
             }
             if (allowSendingWithoutReply)
             {
-                param.Add("allow_sending_without_reply", allowSendingWithoutReply.ToString());
+                param.allow_sending_without_reply = allowSendingWithoutReply;
             }
             Task<string> taskResult = MakeRequset("sendMessage", param: param);
             string result = taskResult.Result;
@@ -168,19 +177,23 @@ namespace CsTeleBot
             return result.Remove(result.Length - 1, 1);
         }
 
-        private async Task<string> MakeRequset(string methodName, string method = "GET", Dictionary<string, string> param = null)
+        private async Task<string> MakeRequset(string methodName, string method = "GET", AllAvalibleParams param = null)
         {
             string requestUrl = $"{BaseApiUrl}{this.Token}/{methodName}";
-            if (param != null)
+            HttpClient client = new HttpClient();
+            var request = new HttpRequestMessage
             {
-                requestUrl += "?" + httpBuildQuery(param);
-            }
-            var request = WebRequest.Create(requestUrl);
-            request.Method = method;
-            using var webResponse = request.GetResponse();
-            using var webStream = webResponse.GetResponseStream();
-            using var reader = new StreamReader(webStream);
-            var result = reader.ReadToEnd();
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(requestUrl),
+                Content = new StringContent(JsonConvert.SerializeObject(param, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
+                Encoding.UTF8, "application/json"),
+            };
+            var x = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
+            Console.WriteLine(x);
+            var response = await client.SendAsync(request).ConfigureAwait(false);
+            var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            Console.WriteLine(result);
+            response.EnsureSuccessStatusCode();
             return result;
         }
     }

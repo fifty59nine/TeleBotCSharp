@@ -92,4 +92,21 @@ namespace CsTeleBot
         public int width { get; set; }
         public int height { get; set; }
     }
+
+    public class Markup { }
+
+
+    public class AllAvalibleParams
+    {
+        public int chat_id { get; set; }
+        public string text { get; set; }
+        public string parse_mode { get; set; }
+        public List<MessageEntity> entities { get; set; }
+        public bool disable_web_page_preview { get; set; }
+        public bool disable_notification { get; set; }
+        public int reply_to_message_id { get; set; }
+        public bool allow_sending_without_reply { get; set; }
+        public Markup reply_markup { get; set; }
+
+    }
 }
