@@ -48,35 +48,17 @@ namespace CsTeleBot
 
         public async Task<SendMessageResp> SendMessage(int chatId, string text, string parseMode = null, List<MessageEntity> entities = null, 
             bool disableWebPagePreview = false, bool disableNotification = false, int replyToMessageId = 0,
-            bool allowSendingWithoutReply = false)
+            bool allowSendingWithoutReply = false, Markup replyMarkup = null)
         {
             var param = new AllAvalibleParams();
             param.chat_id = chatId;
             param.text = text;
-            if (parseMode != null)
-            {
-                param.parse_mode = parseMode;
-            }
-            if (entities != null)
-            {
-                // Нужно придумать как его прикрепить!
-            }
-            if (disableWebPagePreview)
-            {
-                param.disable_web_page_preview = disableWebPagePreview;
-            }
-            if (disableNotification)
-            {
-                param.disable_notification = disableNotification;
-            }
-            if (replyToMessageId != 0)
-            {
-                param.reply_to_message_id = replyToMessageId;
-            }
-            if (allowSendingWithoutReply)
-            {
-                param.allow_sending_without_reply = allowSendingWithoutReply;
-            }
+            param.parse_mode = parseMode;
+            param.disable_web_page_preview = disableWebPagePreview;
+            param.disable_notification = disableNotification;
+            param.reply_to_message_id = replyToMessageId;
+            param.allow_sending_without_reply = allowSendingWithoutReply;
+            param.reply_markup = replyMarkup;
             Task<string> taskResult = MakeRequset("sendMessage", param: param);
             string result = taskResult.Result;
             return JsonConvert.DeserializeObject<SendMessageResp>(result);
@@ -188,11 +170,11 @@ namespace CsTeleBot
                 Content = new StringContent(JsonConvert.SerializeObject(param, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
                 Encoding.UTF8, "application/json"),
             };
-            var x = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
-            Console.WriteLine(x);
+            //var x = await request.Content.ReadAsStringAsync().ConfigureAwait(false);
+            //Console.WriteLine(x);
             var response = await client.SendAsync(request).ConfigureAwait(false);
             var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
             response.EnsureSuccessStatusCode();
             return result;
         }

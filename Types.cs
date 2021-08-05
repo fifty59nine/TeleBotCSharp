@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TeleBotCSharp;
 
 namespace CsTeleBot
 {
@@ -92,9 +93,6 @@ namespace CsTeleBot
         public int width { get; set; }
         public int height { get; set; }
     }
-
-    public class Markup { }
-
 
     public class AllAvalibleParams
     {
