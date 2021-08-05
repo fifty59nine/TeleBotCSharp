@@ -77,6 +77,7 @@ namespace CsTeleBot
     {
         public int update_id { get; set; }
         public Message message { get; set; }
+        public CallbackQuery callback_query { get; set; }
     }
 
     public class GetUpdatesResp
@@ -106,5 +107,14 @@ namespace CsTeleBot
         public bool allow_sending_without_reply { get; set; }
         public Markup reply_markup { get; set; }
 
+    }
+
+    public class CallbackQuery
+    {
+        public string id { get; set; }
+        public From from { get; set; }
+        public Message message { get; set; }
+        public string chat_instance { get; set; }
+        public string data { get; set; }
     }
 }

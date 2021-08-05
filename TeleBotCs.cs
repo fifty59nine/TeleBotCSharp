@@ -86,54 +86,81 @@ namespace CsTeleBot
                 {
                     if (DoesFirstTime)
                     {
-                        MessagesIds.Add(result.message.message_id);
+                        try
+                        {
+                            MessagesIds.Add(result.message.message_id);
+                        } catch (NullReferenceException)
+                        {
+                            MessagesIds.Add(result.message.message_id);
+                        }
                     }
-                    if (MessagesIds.Contains(result.message.message_id)) {  }
-                    else
+                    try
                     {
-                        Type messageType = null;
-                        if (result.message.photo != null)
+                        if (MessagesIds.Contains(result.message.message_id)) { }
+                        else
                         {
-                            messageType = typeof(PhotoHandler);
-                        } 
-                        else if (result.message.text.StartsWith('/'))
-                        {
-                            messageType = typeof(CommandHandler);
-                        }
-                        else if (result.message.text != null)
-                        {
-                            messageType = typeof(MessageHandler);
-                        }
-                        var methods = AppDomain.CurrentDomain.GetAssemblies()
-                            .SelectMany(x => x.GetTypes())
-                            .Where(x => x.IsClass)
-                            .SelectMany(x => x.GetMethods())
-                            .Where(x => x.GetCustomAttributes(messageType, false).FirstOrDefault() != null);
-                        if (messageType == typeof(CommandHandler))
-                        {
-                            foreach (var x in methods)
+                            Type messageType = null;
+                            if (result.message.photo != null)
                             {
-                                foreach (var command in x.GetCustomAttributesData().ToArray().Last().ConstructorArguments)
+                                messageType = typeof(PhotoHandler);
+                            }
+                            else if (result.message.text.StartsWith('/'))
+                            {
+                                messageType = typeof(CommandHandler);
+                            }
+                            else if (result.message.text != null)
+                            {
+                                messageType = typeof(MessageHandler);
+                            }
+                            var methods = AppDomain.CurrentDomain.GetAssemblies()
+                                .SelectMany(x => x.GetTypes())
+                                .Where(x => x.IsClass)
+                                .SelectMany(x => x.GetMethods())
+                                .Where(x => x.GetCustomAttributes(messageType, false).FirstOrDefault() != null);
+                            if (messageType == typeof(CommandHandler))
+                            {
+                                foreach (var x in methods)
                                 {
-                                    if (command.ToString().Replace("\"", "") == result.message.text.Replace("/", ""))
+                                    foreach (var command in x.GetCustomAttributesData().ToArray().Last().ConstructorArguments)
                                     {
-                                        var temp = Activator.CreateInstance(x.DeclaringType);
-                                        x.Invoke(temp, new object[1] { result });
-                                        break;
+                                        if (command.ToString().Replace("\"", "") == result.message.text.Replace("/", ""))
+                                        {
+                                            var temp = Activator.CreateInstance(x.DeclaringType);
+                                            x.Invoke(temp, new object[1] { result });
+                                            break;
+                                        }
                                     }
                                 }
                             }
+                            else
+                            {
+                                foreach (var x in methods)
+                                {
+                                    var obj = Activator.CreateInstance(x.DeclaringType);
+                                    x.Invoke(obj, new object[1] { result });
+                                }
+                            }
                         }
+                        MessagesIds.Add(result.message.message_id);
+                    } catch (NullReferenceException)
+                    {
+                        if (MessagesIds.Contains(result.callback_query.message.message_id)) { }
                         else
                         {
+                            var messageType = typeof(CallbackDataHandler);
+                            var methods = AppDomain.CurrentDomain.GetAssemblies()
+                                    .SelectMany(x => x.GetTypes())
+                                    .Where(x => x.IsClass)
+                                    .SelectMany(x => x.GetMethods())
+                                    .Where(x => x.GetCustomAttributes(messageType, false).FirstOrDefault() != null);
                             foreach (var x in methods)
                             {
                                 var obj = Activator.CreateInstance(x.DeclaringType);
                                 x.Invoke(obj, new object[1] { result });
                             }
-                        }
+                            MessagesIds.Add(result.callback_query.message.message_id);
+                        }                        
                     }
-                    MessagesIds.Add(result.message.message_id);
                 }
                 Thread.Sleep(timeout);
                 DoesFirstTime = false;

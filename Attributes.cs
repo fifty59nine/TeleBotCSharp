@@ -19,4 +19,7 @@ namespace TeleBotCSharp
             this.Command = command;
         }
     }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class CallbackDataHandler : System.Attribute { }
 }
