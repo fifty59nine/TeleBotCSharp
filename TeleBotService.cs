@@ -20,7 +20,7 @@ namespace TeleBotCSharp
         }
 
 
-        public override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
