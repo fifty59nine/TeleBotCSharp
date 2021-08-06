@@ -106,6 +106,7 @@ namespace CsTeleBot
         public int reply_to_message_id { get; set; }
         public bool allow_sending_without_reply { get; set; }
         public Markup reply_markup { get; set; }
+        public int offset { get; set; }
 
     }
 

@@ -66,9 +66,10 @@ namespace CsTeleBot
             return JsonConvert.DeserializeObject<SendMessageResp>(result);
         }
 
-        public async Task<GetUpdatesResp> GetUpdates()
+        public async Task<GetUpdatesResp> GetUpdates(int offset = 0)
         {
-            Task<string> taskResult = MakeRequset("getUpdates");
+            var param = new AllAvalibleParams { offset = offset };
+            Task<string> taskResult = MakeRequset("getUpdates", param: param);
             string result = taskResult.Result;
             return JsonConvert.DeserializeObject<GetUpdatesResp>(result);
         }

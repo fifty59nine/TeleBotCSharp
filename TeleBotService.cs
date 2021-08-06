@@ -13,12 +13,17 @@ namespace TeleBotCSharp
     public class TeleBotService : BackgroundService
     {
         TeleBotCs bot { get; set; }
+        private int LastUpdateId { get; set; } = 0;
 
         public TeleBotService(TeleBotCs bot)
         {
             this.bot = bot;
         }
 
+        public async Task StartBotAsync()
+        {
+            await ExecuteAsync(new CancellationToken());
+        }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -34,9 +39,10 @@ namespace TeleBotCSharp
             List<int> MessagesIds = new List<int>();
             while (true)
             {
-                GetUpdatesResp resp = await bot.GetUpdates();
+                GetUpdatesResp resp = await bot.GetUpdates(offset: LastUpdateId);
                 foreach (Result result in resp.result)
                 {
+                    LastUpdateId = result.update_id;
                     if (DoesFirstTime)
                     {
                         try
@@ -47,10 +53,11 @@ namespace TeleBotCSharp
                         {
                             MessagesIds.Add(result.callback_query.message.message_id);
                         }
+                        continue;
                     }
                     try
                     {
-                        if (MessagesIds.Contains(result.message.message_id)) { }
+                        if (MessagesIds.Contains(result.message.message_id)) {  }
                         else
                         {
                             Type messageType = null;
