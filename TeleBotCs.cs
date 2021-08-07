@@ -74,6 +74,96 @@ namespace CsTeleBot
             return JsonConvert.DeserializeObject<GetUpdatesResp>(result);
         }
 
+        #region ForwardMessage overloadings
+        public async Task ForwardMessage(int chatId, int fromChatId, int messageId,
+            bool disableNotification = false)
+        {
+            var param = new ForwardMessageParamsV1
+            {
+                chat_id = chatId,
+                from_chat_id = fromChatId,
+                message_id = messageId,
+                disable_notification = disableNotification
+            };
+            await MakeRequset("forwardMessage", param: param);
+        }
+        public async Task ForwardMessage(int chatId, string fromChatId, int messageId,
+            bool disableNotification = false)
+        {
+            var param = new ForwardMessageParamsV2
+            {
+                chat_id = chatId,
+                from_chat_id = fromChatId,
+                message_id = messageId,
+                disable_notification = disableNotification
+            };
+            await MakeRequset("forwardMessage", param: param);
+        }
+        public async Task ForwardMessage(string chatId, int fromChatId, int messageId,
+            bool disableNotification = false)
+        {
+            var param = new ForwardMessageParamsV3
+            {
+                chat_id = chatId,
+                from_chat_id = fromChatId,
+                message_id = messageId,
+                disable_notification = disableNotification
+            };
+            await MakeRequset("forwardMessage", param: param);
+        }
+        public async Task ForwardMessage(string chatId, string fromChatId, int messageId,
+            bool disableNotification = false)
+        {
+            var param = new ForwardMessageParamsV4
+            {
+                chat_id = chatId,
+                from_chat_id = fromChatId,
+                message_id = messageId,
+                disable_notification = disableNotification
+            };
+            await MakeRequset("forwardMessage", param: param);
+        }
+        #endregion
+        #region SendPhoto overloadings
+        public async Task SendPhoto(int chatId, string photo,
+            string caption = null, string parseMode = null, List<MessageEntity> captionEntites = null,
+            bool disableNotification = false, int replyToMessageId = 0,
+            bool allowSendingWithoutReply = false, Markup replyMarkup = null)
+        {
+            var param = new SendPhotoParamsV1
+            {
+                chat_id = chatId,
+                photo = photo,
+                caption = caption,
+                parse_mode = parseMode,
+                caption_entities = captionEntites,
+                disable_notification = disableNotification,
+                allow_sending_without_reply = allowSendingWithoutReply,
+                reply_markup = replyMarkup
+            };
+            if (replyToMessageId != 0) { param.reply_to_message_id = replyToMessageId; }
+        }
+        public async Task SendPhoto(string chatId, string photo,
+            string caption = null, string parseMode = null, List<MessageEntity> captionEntites = null,
+            bool disableNotification = false, int replyToMessageId = 0,
+            bool allowSendingWithoutReply = false, Markup replyMarkup = null)
+        {
+            var param = new SendPhotoParamsV2
+            {
+                chat_id = chatId,
+                photo = photo,
+                caption = caption,
+                parse_mode = parseMode,
+                caption_entities = captionEntites,
+                disable_notification = disableNotification,
+                allow_sending_without_reply = allowSendingWithoutReply,
+                reply_markup = replyMarkup
+            };
+            if (replyToMessageId != 0) { param.reply_to_message_id = replyToMessageId; }
+        }
+        #endregion
+
+        #region private methods
         private string httpBuildQuery(Dictionary<string, string> keyValuePairs)
         {
             string result = "";
@@ -93,7 +183,7 @@ namespace CsTeleBot
             return result.Remove(result.Length - 1, 1);
         }
 
-        private async Task<string> MakeRequset(string methodName, string method = "GET", AllAvalibleParams param = null)
+        private async Task<string> MakeRequset(string methodName, string method = "GET", Params param = null)
         {
             string requestUrl = $"{BaseApiUrl}{this.Token}/{methodName}";
             HttpClient client = new HttpClient();
@@ -112,5 +202,6 @@ namespace CsTeleBot
             response.EnsureSuccessStatusCode();
             return result;
         }
+        #endregion
     }
 }
