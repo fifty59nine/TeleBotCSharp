@@ -1,14 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-
-using System.Linq;
-
 using System.Net.Http;
-
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TeleBotCSharp;
 
 namespace CsTeleBot
@@ -18,6 +13,9 @@ namespace CsTeleBot
     ///     GetMe
     ///     SendMessage
     ///     Polling
+    ///     ForwardMessage
+    ///     SendAudio
+    ///     SendPhoto
     /// </summary>
     public class TeleBotCs
     {
@@ -48,7 +46,7 @@ namespace CsTeleBot
             return JsonConvert.DeserializeObject<GetMeResp>(result).result;
         }
 
-        public async Task<SendMessageResp> SendMessage(int chatId, string text, string parseMode = null, List<MessageEntity> entities = null, 
+        public async Task<SendMessageResp> SendMessage(int chatId, string text, string parseMode = null, List<MessageEntity> entities = null,
             bool disableWebPagePreview = false, bool disableNotification = false, int replyToMessageId = 0,
             bool allowSendingWithoutReply = false, Markup replyMarkup = null)
         {
@@ -124,6 +122,7 @@ namespace CsTeleBot
             await MakeRequset("forwardMessage", param: param);
         }
         #endregion
+
         #region SendPhoto overloadings
         public async Task SendPhoto(int chatId, string photo,
             string caption = null, string parseMode = null, List<MessageEntity> captionEntites = null,
@@ -160,6 +159,44 @@ namespace CsTeleBot
                 reply_markup = replyMarkup
             };
             if (replyToMessageId != 0) { param.reply_to_message_id = replyToMessageId; }
+        }
+        #endregion
+
+        #region SendAudio overloadings
+        public async Task SendAudio(int chatId, string audio, string caption = null, string parseMode = null,
+            List<MessageEntity> captionEntities = null, int duration = 0, string performer = null, string title = null, string thumb = null)
+        {
+            var param = new SendAudioParamsV1
+            {
+                chat_id = chatId,
+                audio = audio,
+                caption = caption,
+                parse_mode = parseMode,
+                caption_entities = captionEntities,
+                duration = duration,
+                performer = performer,
+                title = title,
+                thumb = thumb
+            };
+            await MakeRequset("sendAudio", param: param);
+        }
+
+        public async Task SendAudio(string chatId, string audio, string caption = null, string parseMode = null,
+    List<MessageEntity> captionEntities = null, int duration = 0, string performer = null, string title = null, string thumb = null)
+        {
+            var param = new SendAudioParamsV2
+            {
+                chat_id = chatId,
+                audio = audio,
+                caption = caption,
+                parse_mode = parseMode,
+                caption_entities = captionEntities,
+                duration = duration,
+                performer = performer,
+                title = title,
+                thumb = thumb
+            };
+            await MakeRequset("sendAudio", param: param);
         }
         #endregion
 

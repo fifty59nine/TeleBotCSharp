@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TeleBotCSharp
 {
@@ -11,8 +9,8 @@ namespace TeleBotCSharp
     public class PhotoHandler : System.Attribute { }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class CommandHandler : System.Attribute 
-    { 
+    public class CommandHandler : System.Attribute
+    {
         public string Command { get; set; }
         public CommandHandler(string command)
         {
@@ -22,4 +20,7 @@ namespace TeleBotCSharp
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class CallbackDataHandler : System.Attribute { }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class ContactHandler : System.Attribute { }
 }

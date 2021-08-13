@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TeleBotCSharp;
+﻿using System.Collections.Generic;
 
 namespace CsTeleBot
 {
@@ -55,6 +52,7 @@ namespace CsTeleBot
         public string text { get; set; }
         public List<Photo> photo { get; set; }
         public string caption { get; set; }
+        public Contact contact { get; set; }
     }
 
     public class SendMessageResp
@@ -102,5 +100,11 @@ namespace CsTeleBot
         public Message message { get; set; }
         public string chat_instance { get; set; }
         public string data { get; set; }
+    }
+    public class Contact
+    {
+        public string phone_number { get; set; }
+        public string first_name { get; set; }
+        public int user_id { get; set; }
     }
 }

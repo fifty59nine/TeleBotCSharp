@@ -1,12 +1,10 @@
-﻿using CsTeleBot;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TeleBotCSharp;
+using CsTeleBot;
+using Microsoft.Extensions.Hosting;
 
 namespace TeleBotCSharp
 {
@@ -57,13 +55,17 @@ namespace TeleBotCSharp
                     }
                     try
                     {
-                        if (MessagesIds.Contains(result.message.message_id)) {  }
+                        if (MessagesIds.Contains(result.message.message_id)) { }
                         else
                         {
                             Type messageType = null;
                             if (result.message.photo != null)
                             {
                                 messageType = typeof(PhotoHandler);
+                            }
+                            else if (result.message.contact != null)
+                            {
+                                messageType = typeof(ContactHandler);
                             }
                             else if (result.message.text.StartsWith('/'))
                             {
