@@ -200,6 +200,24 @@ namespace CsTeleBot
         }
         #endregion
 
+        #region AnswerCallbackQuery
+
+        public async Task AnswerCallbackQuery(string callbackQueryId, string text = null, bool showAlert = false,
+            string url = null, int cacheTime = 0)
+        {
+            var param = new AnswerCallbackQueryParams
+            {
+                callback_query_id = callbackQueryId,
+                text = text,
+                show_alert = showAlert,
+                url = url,
+                cache_time = cacheTime
+            };
+            MakeRequset("answerCallbackQuery", param: param);
+        }
+
+        #endregion
+
         #region private methods
         private string httpBuildQuery(Dictionary<string, string> keyValuePairs)
         {

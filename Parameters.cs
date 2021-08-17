@@ -105,4 +105,14 @@ namespace TeleBotCSharp
         public bool allow_sending_without_reply { get; set; }
         public Markup reply_markup { get; set; }
     }
+
+
+    public class AnswerCallbackQueryParams : Params
+    {
+        public string callback_query_id { get; set; }
+        public string text { get; set; }
+        public bool show_alert { get; set; }
+        public string url { get; set; }
+        public int cache_time { get; set; }
+    }
 }

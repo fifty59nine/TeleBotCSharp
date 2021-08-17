@@ -108,7 +108,7 @@ namespace TeleBotCSharp
                     }
                     catch (NullReferenceException)
                     {
-                        if (MessagesIds.Contains(result.callback_query.message.message_id)) { }
+                        if (MessagesIds.Contains(result.update_id)) { }
                         else
                         {
                             var messageType = typeof(CallbackDataHandler);
@@ -122,7 +122,7 @@ namespace TeleBotCSharp
                                 var obj = Activator.CreateInstance(x.DeclaringType);
                                 x.Invoke(obj, new object[1] { result });
                             }
-                            MessagesIds.Add(result.callback_query.message.message_id);
+                            MessagesIds.Add(result.update_id);
                         }
                     }
                 }
