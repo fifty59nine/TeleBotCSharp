@@ -16,6 +16,7 @@ namespace CsTeleBot
     ///     ForwardMessage
     ///     SendAudio
     ///     SendPhoto
+    ///     AnswerCallbackQuery
     /// </summary>
     public class TeleBotCs
     {
