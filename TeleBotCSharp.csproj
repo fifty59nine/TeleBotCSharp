@@ -4,12 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>TeleBotCSharp</AssemblyName>
     <RootNamespace>TeleBotCSharp</RootNamespace>
-    <Version>0.12.1</Version>
+    <Version>0.12.1.2</Version>
     <Authors>UndecimoDia(fifty59nine), Hereigo</Authors>
     <Company>KUD Technologies</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Library for using Telegram Bot API</Description>
     <RepositoryUrl>https://github.com/fifty59nine/TeleBotCSharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/fifty59nine/TeleBotCSharp</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

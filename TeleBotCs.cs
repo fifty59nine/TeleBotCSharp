@@ -4,9 +4,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using TeleBotCSharp;
 
-namespace CsTeleBot
+namespace TeleBotCSharp
 {
     /// <summary>
     /// Avalible methods:
@@ -26,7 +25,7 @@ namespace CsTeleBot
         public int Timeout { get; set; }
 
         /// <summary>
-        /// CsTeleBot object constructor
+        /// TeleBotCs object constructor
         /// </summary>
         /// <param name="Token">Telegram bot api token</param>
         /// <param name="ParseMode">Default parse mode. Details on: https://core.telegram.org/bots/api#formatting-options </param>

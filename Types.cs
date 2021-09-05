@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CsTeleBot
+namespace TeleBotCSharp
 {
     public class GetMeResponse
     {

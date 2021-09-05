@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CsTeleBot;
 
 namespace TeleBotCSharp
 {
